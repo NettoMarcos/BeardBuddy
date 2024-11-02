@@ -1,4 +1,4 @@
-package com.oak.beardbuddy.cliente;
+package com.oak.beardbuddy.domain.cliente;
 
 import jakarta.validation.constraints.NotNull;
 

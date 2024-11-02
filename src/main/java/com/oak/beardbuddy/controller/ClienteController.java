@@ -1,6 +1,6 @@
 package com.oak.beardbuddy.controller;
 
-import com.oak.beardbuddy.cliente.*;
+import com.oak.beardbuddy.domain.cliente.*;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class ClienteController {
 
     @PostMapping
     @RequestMapping("/cadastrar")
-    public ResponseEntity<ClienteDetalhesDTO> cadastrarCliente(@RequestBody ClienteCadastroDTO dto, UriComponentsBuilder uriBuilder){
+    public ResponseEntity<ClienteDetalhesDTO> cadastrarCliente(@RequestBody @Valid ClienteCadastroDTO dto, UriComponentsBuilder uriBuilder){
         var cliente = new Cliente(dto);
         repository.save(cliente);
 
