@@ -1,4 +1,4 @@
-package com.oak.beardbuddy.infra;
+package com.oak.beardbuddy.infra.exception;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -35,7 +35,7 @@ public class ErrorHandler {
             errorMessage = "Campo duplicado.";
         }
 
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse(field, errorMessage));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(field, errorMessage));
     }
 
     private String extractField(String errorMessage) {

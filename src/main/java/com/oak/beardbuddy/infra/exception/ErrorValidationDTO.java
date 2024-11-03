@@ -1,4 +1,4 @@
-package com.oak.beardbuddy.infra;
+package com.oak.beardbuddy.infra.exception;
 
 import org.springframework.validation.FieldError;
 
