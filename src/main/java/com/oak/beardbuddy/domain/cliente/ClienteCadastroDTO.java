@@ -13,4 +13,5 @@ public record ClienteCadastroDTO(
         @NotBlank
         String telefone,
         Date dataNascimento) {
+
 }
