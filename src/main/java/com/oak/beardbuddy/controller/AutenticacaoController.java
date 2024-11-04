@@ -1,6 +1,9 @@
 package com.oak.beardbuddy.controller;
 
 import com.oak.beardbuddy.domain.usuario.AutenticacaoDTO;
+import com.oak.beardbuddy.domain.usuario.Usuario;
+import com.oak.beardbuddy.infra.security.TokenJWT_DTO;
+import com.oak.beardbuddy.infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,11 +21,15 @@ public class AutenticacaoController {
     @Autowired
     private AuthenticationManager manager;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping
     public ResponseEntity<?> efetuarLogin(@RequestBody @Validated AutenticacaoDTO dto){
-        var token = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
-        var authentication = manager.authenticate(token);
+        var authenticationTokentoken = new UsernamePasswordAuthenticationToken(dto.login(), dto.senha());
+        var authentication = manager.authenticate(authenticationTokentoken);
 
-        return ResponseEntity.ok().build();
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+        return ResponseEntity.ok(new TokenJWT_DTO(tokenJWT));
     }
 }
