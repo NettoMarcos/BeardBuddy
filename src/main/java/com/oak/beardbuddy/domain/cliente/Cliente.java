@@ -45,4 +45,10 @@ public class Cliente {
             this.dataNascimento = dto.dataNascimento();
         }
     }
+
+    public void atualizarPontosGanhos(Cliente cliente, Integer pontosGanhos) {
+        if (pontosGanhos > 0){
+            this.pontos += pontosGanhos;
+        }
+    }
 }

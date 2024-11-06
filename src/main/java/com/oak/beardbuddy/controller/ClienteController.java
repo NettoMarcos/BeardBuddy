@@ -60,7 +60,7 @@ public class ClienteController {
     @DeleteMapping
     @RequestMapping("/deletar/{id}")
     @Transactional
-    public ResponseEntity<?> excluir(@PathVariable Long id){
+    public ResponseEntity<?> excluirCliente(@PathVariable Long id){
         repository.deleteById(id);
 
         return ResponseEntity.noContent().build();

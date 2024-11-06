@@ -1,6 +1,7 @@
 package com.oak.beardbuddy.controller;
 
 import com.oak.beardbuddy.domain.produto.*;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -43,9 +44,22 @@ public class ProdutoController {
         return ResponseEntity.ok(new ProdutoDetalhesDTO(produto));
     }
 
-    @GetMapping("/listar-tipo/{tipo}")
-    public ResponseEntity<Page<ProdutoDetalhesDTO>> buscarPorTipo(@PathVariable EnumTipo tipo, @PageableDefault(size = 10, page = 0) Pageable pagina) {
-        var page = repository.findByTipo(String.valueOf(tipo), pagina).map(ProdutoDetalhesDTO::new);
-        return ResponseEntity.ok(page);
+    @PutMapping
+    @RequestMapping("/atualizar")
+    @Transactional
+    public ResponseEntity<ProdutoDetalhesDTO> atualizarProduto(@RequestBody @Valid ProdutoAtualizarDTO dto){
+        var produto = repository.getReferenceById(dto.id());
+        produto.atualizarProduto(dto);
+
+        return ResponseEntity.ok(new ProdutoDetalhesDTO(produto));
+    }
+
+    @DeleteMapping
+    @RequestMapping("/atualizar/{id}")
+    @Transactional
+    public ResponseEntity<?> excluirProduto(@PathVariable Long id){
+        repository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,51 +1,39 @@
-package com.oak.beardbuddy.domain.produto;
+package com.oak.beardbuddy.domain.servico;
 
-import com.oak.beardbuddy.domain.cliente.ClienteCadastroDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Table(name = "TB_PRODUTOS")
-@Entity(name = "produto")
+@Table(name = "TB_SERVICOS")
+@Entity(name = "servico")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
-public class Produto {
-
+public class Servico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private Double preco;
-    private Integer quantidade;
     private Integer valorEmPontos;
 
-
-
-    public Produto(ProdutoCadastroDTO dto) {
+    public Servico(ServicoCadastroDTO dto) {
         this.nome = dto.nome();
         this.preco = dto.preco();
-        this.quantidade = dto.quantidade();
         this.valorEmPontos = dto.valorEmPontos();
-
     }
 
-    public void atualizarProduto(ProdutoAtualizarDTO dto) {
+    public void atualizarServico(ServicoAtualizarDTO dto) {
+
         if(dto.nome() != null){
             this.nome = dto.nome();
         }
-        if (dto.preco() != null){
+        if(dto.preco() != null){
             this.preco = dto.preco();
         }
         if (dto.valorEmPontos() != null){
             this.valorEmPontos = dto.valorEmPontos();
-        }
-    }
-
-    public void atualizarQuantidade(Produto produto){
-        if (produto != null){
-            this.quantidade -= 1;
         }
     }
 }
