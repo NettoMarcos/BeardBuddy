@@ -46,7 +46,7 @@ public class Cliente {
         }
     }
 
-    public void atualizarPontosGanhos(Cliente cliente, Integer pontosGanhos) {
+    public void atualizarPontosGanhos(Integer pontosGanhos) {
         if (pontosGanhos > 0){
             this.pontos += pontosGanhos;
         }

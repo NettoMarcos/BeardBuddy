@@ -3,8 +3,8 @@ package com.oak.beardbuddy.domain.fatura;
 import com.oak.beardbuddy.domain.cliente.Cliente;
 import com.oak.beardbuddy.domain.cliente.ClienteRepository;
 import com.oak.beardbuddy.domain.produto.Produto;
-import com.oak.beardbuddy.domain.produto.ProdutoDetalhesDTO;
 import com.oak.beardbuddy.domain.produto.ProdutoRepository;
+import com.oak.beardbuddy.domain.servico.ServicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +17,23 @@ public class FaturaService {
     @Autowired
     ClienteRepository clienteRepository;
 
+    @Autowired
+    ServicoRepository servicoRepository;
+
 
     public void atualizar(String cpf, Long idProdOrServ, EnumTipo tipo) {
 
-        if (tipo.toString() == "PRODUTO"){
+        if (tipo.toString().equals("PRODUTO")){
             var produto = produtoRepository.getReferenceById(idProdOrServ);
             atualizarQtdProduto(produto);
 
             var cliente = clienteRepository.findByCpf();
-            atualizarPontosCliente(produto, cliente);
+            atualizarPontosCliente(produto.getPreco(), cliente);
+        }else if(tipo.toString().equals("SERVICO")){
+            var servico = servicoRepository.getReferenceById(idProdOrServ);
+            var cliente = clienteRepository.findByCpf();
+
+            atualizarPontosCliente(servico.getPreco(), cliente);
         }
 
     }
@@ -35,10 +43,10 @@ public class FaturaService {
     }
 
 
-    private void atualizarPontosCliente(Produto produto, Cliente cliente) {
-        Double preco = produto.getPreco();
+    private void atualizarPontosCliente(Double preco, Cliente cliente) {
+
         Integer pontosGanhos = (int) (preco * 100);
 
-        cliente.atualizarPontosGanhos(cliente,pontosGanhos);
+        cliente.atualizarPontosGanhos(pontosGanhos);
     }
 }

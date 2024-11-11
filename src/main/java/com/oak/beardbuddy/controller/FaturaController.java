@@ -1,6 +1,7 @@
 package com.oak.beardbuddy.controller;
 
 import com.oak.beardbuddy.domain.fatura.*;
+import com.oak.beardbuddy.domain.produto.ProdutoRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,19 @@ public class FaturaController {
     @Autowired
     private FaturaService service;
 
+    @Autowired
+    ProdutoRepository produtoRepository;
+
     @PostMapping
     @RequestMapping("/cadastrar")
     public ResponseEntity<List<FaturaDetalhesDTO>> cadastrarFatura(@RequestBody @Valid List<FaturaCadastroDTO> dtos , UriComponentsBuilder uriBuilder){
 
         List<FaturaDetalhesDTO> faturasCriadas = new ArrayList<>();
         for(FaturaCadastroDTO dto : dtos ){
-            var fatura = new Fatura(dto);
+
+            var produto = produtoRepository.getReferenceById(dto.idProdOrServ());
+
+            var fatura = new Fatura(dto, produto.getPreco());
 
 
             service.atualizar(dto.cpfCliente(), dto.idProdOrServ(), dto.tipo());

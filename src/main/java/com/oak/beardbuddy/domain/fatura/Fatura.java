@@ -22,11 +22,13 @@ public class Fatura {
     @Enumerated(EnumType.STRING)
     private EnumTipo tipo;
     private Date dataPagamento;
+    private Double valorFatura;
 
-    public Fatura(FaturaCadastroDTO dto) {
+    public Fatura(FaturaCadastroDTO dto, Double valorFatura) {
         this.cpfCliente = dto.cpfCliente();
         this.idProdOrServ = dto.idProdOrServ();
         this.tipo = dto.tipo();
         this.dataPagamento = new Date();
+        this.valorFatura = valorFatura;
     }
 }
