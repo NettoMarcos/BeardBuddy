@@ -23,25 +23,31 @@ public class SecurityConfigurations {
     private SecurityFilter securityFilter;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-        return  http.csrf(AbstractHttpConfigurer::disable)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        return http.csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(java.util.Collections.singletonList("http://localhost:8081")); // Permite apenas essa origem
+                    config.setAllowedMethods(java.util.Arrays.asList("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedHeaders(java.util.Arrays.asList("Authorization", "Content-Type"));
+                    return config;
+                }))
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(req ->{
-                    req.requestMatchers("/login").permitAll();
-                    req.anyRequest().authenticated();
+                .authorizeHttpRequests(req -> {
+                    req.requestMatchers("/login").permitAll(); // Permite acesso sem autenticação
+                    req.anyRequest().authenticated(); // Exige autenticação para outras rotas
                 })
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception{
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

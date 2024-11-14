@@ -29,6 +29,7 @@ public class Cliente {
         this.cpf = dto.cpf();
         this.telefone = dto.telefone();
         this.dataNascimento = dto.dataNascimento();
+        this.pontos = 0;
     }
 
     public void atualizarCliente(ClienteAtualizarDTO dto) {
@@ -47,8 +48,6 @@ public class Cliente {
     }
 
     public void atualizarPontosGanhos(Integer pontosGanhos) {
-        if (pontosGanhos > 0){
-            this.pontos += pontosGanhos;
-        }
+        this.pontos += pontosGanhos;
     }
 }

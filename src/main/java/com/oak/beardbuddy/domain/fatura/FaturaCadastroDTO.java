@@ -5,7 +5,9 @@ import jakarta.validation.constraints.NotNull;
 public record FaturaCadastroDTO(
         String cpfCliente,
         @NotNull
-        Long idProdOrServ,
+        Long id_venda,
         @NotNull
-        EnumTipo tipo) {
+        EnumTipo tipo,
+        @NotNull
+        Boolean pagoEmPontos) {
 }

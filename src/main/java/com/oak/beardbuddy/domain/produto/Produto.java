@@ -1,6 +1,7 @@
 package com.oak.beardbuddy.domain.produto;
 
 import com.oak.beardbuddy.domain.cliente.ClienteCadastroDTO;
+import com.oak.beardbuddy.infra.exception.ProdutoForaDeEstoqueException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,7 +27,11 @@ public class Produto {
     public Produto(ProdutoCadastroDTO dto) {
         this.nome = dto.nome();
         this.preco = dto.preco();
-        this.quantidade = dto.quantidade();
+        if (dto.quantidade() != null){
+            this.quantidade = dto.quantidade();
+        } else{
+            this.quantidade = 0;
+        }
         this.valorEmPontos = dto.valorEmPontos();
 
     }
@@ -43,9 +48,10 @@ public class Produto {
         }
     }
 
-    public void atualizarQuantidade(Produto produto){
-        if (produto != null){
-            this.quantidade -= 1;
+    public void atualizarQuantidade(Produto produto) {
+        if (quantidade <= 0) {
+            throw new ProdutoForaDeEstoqueException("Produto " + produto.getNome() + " está fora de estoque.");
         }
+        this.quantidade -= 1;
     }
 }
