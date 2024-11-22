@@ -1,6 +1,7 @@
 package com.oak.beardbuddy.controller;
 
 import com.oak.beardbuddy.domain.cliente.*;
+import com.oak.beardbuddy.domain.fatura.FaturaDetalhesDTO;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
 
 
 @RestController
@@ -33,10 +35,10 @@ public class ClienteController {
 
     @GetMapping
     @RequestMapping("/listar")
-    public ResponseEntity<Page<ClienteListarDTO>> listarCliente(@PageableDefault(size = 10, page = 0, sort = {"nome"}) Pageable pagina){
-       var page = repository.findAll(pagina).map(ClienteListarDTO::new);
+    public ResponseEntity<List<ClienteDetalhesDTO>> listarCliente(){
+        List<ClienteDetalhesDTO> lista = repository.findAll().stream().map(ClienteDetalhesDTO::new).toList();
 
-       return ResponseEntity.ok(page);
+       return ResponseEntity.ok(lista);
     }
 
     @GetMapping

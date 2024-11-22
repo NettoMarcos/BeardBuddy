@@ -48,7 +48,7 @@ public class Produto {
         }
     }
 
-    public void atualizarQuantidade(Produto produto) {
+    public void atualizarQuantidade(Produto produto ) {
         if (quantidade <= 0) {
             throw new ProdutoForaDeEstoqueException("Produto " + produto.getNome() + " está fora de estoque.");
         }

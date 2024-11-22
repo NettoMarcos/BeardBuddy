@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
+import java.util.List;
 
 @Service
 public class FaturaService {
@@ -30,18 +31,30 @@ public class FaturaService {
 
     @Transactional
     public void atualizar(String cpfCliente, Long idProdOrServ, EnumTipo tipo) {
-        Cliente cliente = clienteRepository.findByCpf(cpfCliente);
+            Cliente cliente = clienteRepository.findByCpf(cpfCliente);
 
         if (tipo == EnumTipo.PRODUTO) {
             Produto produto = produtoRepository.findById(idProdOrServ).orElse(null);
             if (produto != null){
                 atualizarQtdProduto(produto);
-                atualizarPontosCliente(produto.getPreco(), cliente);
+                if (cliente != null){
+                    atualizarPontosCliente(produto.getPreco(), cliente);
+                }
             }
         } else if (tipo == EnumTipo.SERVICO) {
-
-            servicoRepository.findById(idProdOrServ).ifPresent(servico -> atualizarPontosCliente(servico.getPreco(), cliente));
+            if (cliente != null){
+                servicoRepository.findById(idProdOrServ).ifPresent(servico -> atualizarPontosCliente(servico.getPreco(), cliente));
+            }
         }
+    }
+    public int contarQuantidadeProduto(List<FaturaCadastroDTO> dtos, FaturaCadastroDTO dto) {
+        int quantidade = 0;
+        for (FaturaCadastroDTO faturaDTO : dtos) {
+            if (faturaDTO.id_venda().equals(dto.id_venda()) && faturaDTO.tipo() == dto.tipo()) {
+                quantidade++;
+            }
+        }
+        return quantidade;
     }
 
     private void atualizarQtdProduto(Produto produto) {

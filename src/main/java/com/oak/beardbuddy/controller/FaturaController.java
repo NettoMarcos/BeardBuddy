@@ -58,10 +58,10 @@ public class FaturaController {
 
     @GetMapping
     @RequestMapping("/listar")
-    public ResponseEntity<Page<FaturaDetalhesDTO>> listarProduto(@PageableDefault(size = 10, page = 0, sort = {"id"}) Pageable pagina){
-        var page = repository.findAll(pagina).map(FaturaDetalhesDTO::new);
+    public ResponseEntity<List<FaturaDetalhesDTO>> listarProduto(){
+        List<FaturaDetalhesDTO> lista = repository.findAll().stream().map(FaturaDetalhesDTO::new).toList();
 
-        return ResponseEntity.ok(page);
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping
@@ -84,6 +84,7 @@ public class FaturaController {
 
     @GetMapping
     @RequestMapping("/total-mes")
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity<FaturaValorTotalDTO> getValorTotalFaturasMesAtual() {
         LocalDate dataAtual = LocalDate.now();
 
