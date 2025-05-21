@@ -1,4 +1,4 @@
-package com.oak.beardbuddy.domain.servico;
+package com.oak.beardbuddy.domain.item.servico;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

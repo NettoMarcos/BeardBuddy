@@ -1,11 +1,14 @@
-package com.oak.beardbuddy.domain.servico;
+package com.oak.beardbuddy.domain.item.servico;
 
 import jakarta.validation.constraints.NotNull;
+
+import java.math.BigDecimal;
 
 public record ServicoAtualizarDTO(
         @NotNull
         Long id,
         String nome,
-        Double preco,
-        Integer valorEmPontos) {
+        BigDecimal preco,
+        Integer valorEmPontos
+) {
 }

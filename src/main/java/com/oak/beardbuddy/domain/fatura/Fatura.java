@@ -1,38 +1,48 @@
 package com.oak.beardbuddy.domain.fatura;
 
-import com.oak.beardbuddy.domain.produto.Produto;
-import com.oak.beardbuddy.domain.servico.Servico;
+import com.oak.beardbuddy.domain.cliente.Cliente;
+import com.oak.beardbuddy.domain.itemVendido.ItemVendido;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
-import java.util.Date;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Table(name = "TB_FATURAS")
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Table(name = "TB_FATURAS")
 public class Fatura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cpfCliente;
-    private Long id_venda;
-    @Enumerated(EnumType.STRING)
-    private EnumTipo tipo;
-    @Column(name = "DATA_PAGAMENTO")
-    private Date dataPagamento;
-    private Double valorFatura;
-    private boolean pagoEmPontos;
 
-    public Fatura(FaturaCadastroDTO dto, Double valorFatura) {
-        this.cpfCliente = dto.cpfCliente();
-        this.id_venda = dto.id_venda();
-        this.tipo = dto.tipo();
-        this.dataPagamento = new Date();
-        this.valorFatura = pagoEmPontos ? 0.0 : valorFatura;
+    private LocalDateTime dataGeracao;
+
+    @Column(name = "VALOR_TOTAL",precision = 10, scale = 4)
+    private BigDecimal valorTotal;
+
+    @ManyToOne
+    @JoinColumn(name = "CLIENTE_ID")
+    private Cliente cliente;
+
+    @OneToMany(mappedBy = "fatura")
+    private List<ItemVendido> itensVendidos;
+
+    public Fatura(Cliente cliente){
+
+        this.dataGeracao = LocalDateTime.now();
+        if(cliente != null){
+            this.cliente = cliente;
+        }
     }
+
 }

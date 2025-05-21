@@ -1,45 +1,46 @@
 package com.oak.beardbuddy.domain.cliente;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-@Table(name = "TB_CLIENTES")
-@Entity(name = "cliente")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
+@Table(name = "TB_CLIENTES")
 public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String nome;
     private String cpf;
     private String telefone;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Integer pontos;
 
-    public Cliente(ClienteCadastroDTO dto) {
+    public Cliente(CLienteCadastrarDTO dto){
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.telefone = dto.telefone();
-        this.dataNascimento = dto.dataNascimento();
-        this.pontos = 0;
+        this. dataNascimento = dto.dataNascimento();
     }
 
-    public void atualizarCliente(ClienteAtualizarDTO dto) {
-        if(dto.nome() != null){
+    public void atualizarCliente(ClienteAtualizarDTO dto){
+        if (dto.nome() != null){
             this.nome = dto.nome();
         }
         if (dto.cpf() != null){
             this.cpf = dto.cpf();
         }
-        if(dto.telefone() != null){
+        if (dto.telefone() != null){
             this.telefone = dto.telefone();
         }
         if (dto.dataNascimento() != null){
@@ -47,7 +48,4 @@ public class Cliente {
         }
     }
 
-    public void atualizarPontosGanhos(Integer pontosGanhos) {
-        this.pontos += pontosGanhos;
-    }
 }

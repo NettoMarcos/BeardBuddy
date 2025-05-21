@@ -1,65 +1,61 @@
 package com.oak.beardbuddy.controller;
 
-
-import com.oak.beardbuddy.domain.produto.ProdutoDetalhesDTO;
-import com.oak.beardbuddy.domain.servico.*;
-import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
+import com.oak.beardbuddy.domain.item.servico.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.util.List;
+
 @RestController
-@RequestMapping("servico")
+@RequestMapping("/servico")
 public class ServicoController {
+
     @Autowired
-    private ServicoRepository repository;
+    ServicoService servicoService;
+
     @PostMapping
     @RequestMapping("/cadastrar")
-    public ResponseEntity<ServicoDetalhesDTO> cadastrarServico(@RequestBody @Valid ServicoCadastroDTO dto, UriComponentsBuilder uriBuilder){
-        var servico = new Servico(dto);
-        repository.save(servico);
+    public ResponseEntity<ServicoDetalhesDTO> cadastrarServico(@RequestBody ServicoCadastroDTO dto, UriComponentsBuilder uriBuilder){
 
-        var uri = uriBuilder.path("/servico/{id}").buildAndExpand(servico.getId()).toUri();
+        Servico servico = servicoService.cadastrarServico(dto);
+
+        URI uri = uriBuilder.path("{id}").buildAndExpand(servico.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new ServicoDetalhesDTO(servico));
     }
 
-   @GetMapping
-   @RequestMapping("/listar")
-   public ResponseEntity<Page<ServicoDetalhesDTO>> listarServico(@PageableDefault(size = 10, page = 0, sort = {"id"})Pageable pagina){
-        var page = repository.findAll(pagina).map(ServicoDetalhesDTO::new);
+    @GetMapping
+    @RequestMapping("/listar")
+    public ResponseEntity<List<ServicoDetalhesDTO>> listarServico(){
+        List<ServicoDetalhesDTO> lista = servicoService.listarServico();
 
-        return ResponseEntity.ok(page);
-   }
+        return ResponseEntity.ok(lista);
+    }
 
     @GetMapping
-    @RequestMapping("/{id}")
-    public ResponseEntity<ServicoDetalhesDTO> buscarPorId(@PathVariable Long id){
-        var servico = repository.getReferenceById(id);
+    @RequestMapping("{id}")
+    public ResponseEntity<ServicoDetalhesDTO> buscarServicoPorId(@PathVariable Long id){
+        ServicoDetalhesDTO servico = servicoService.buscarServicoPorId(id);
 
-        return ResponseEntity.ok(new ServicoDetalhesDTO(servico));
+        return ResponseEntity.ok(servico);
     }
 
     @PutMapping
     @RequestMapping("/atualizar")
-    @Transactional
-    public ResponseEntity<ServicoDetalhesDTO> atualizarProduto(@RequestBody @Valid ServicoAtualizarDTO dto){
-        var servico = repository.getReferenceById(dto.id());
-        servico.atualizarServico(dto);
+    public ResponseEntity<ServicoDetalhesDTO> atualizarServico(@RequestBody ServicoAtualizarDTO dto){
+        Servico servico = servicoService.atualizarServico(dto);
 
         return ResponseEntity.ok(new ServicoDetalhesDTO(servico));
     }
 
     @DeleteMapping
-    @RequestMapping("/atualizar/{id}")
-    @Transactional
-    public ResponseEntity<?> excluirProduto(@PathVariable Long id){
-        repository.deleteById(id);
+    @RequestMapping("/deletar/{id}")
+    public ResponseEntity<Void> deletarServico(@PathVariable Long id){
+
+        servicoService.deletarServico(id);
 
         return ResponseEntity.noContent().build();
     }

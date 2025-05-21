@@ -1,34 +1,31 @@
 package com.oak.beardbuddy.controller;
 
 import com.oak.beardbuddy.domain.cliente.*;
-import com.oak.beardbuddy.domain.fatura.FaturaDetalhesDTO;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("cliente")
+@RequestMapping("/cliente")
 public class ClienteController {
 
     @Autowired
-    private ClienteRepository repository;
+    ClienteService clienteService;
 
     @PostMapping
     @RequestMapping("/cadastrar")
-    public ResponseEntity<ClienteDetalhesDTO> cadastrarCliente(@RequestBody @Valid ClienteCadastroDTO dto, UriComponentsBuilder uriBuilder){
-        var cliente = new Cliente(dto);
-        repository.save(cliente);
+    public ResponseEntity<ClienteDetalhesDTO> cadastrarCliente(@RequestBody @Valid CLienteCadastrarDTO dto,
+                                                                UriComponentsBuilder uriBuilder){
+        Cliente cliente = clienteService.cadastrarCliente(dto);
 
-        var uri = uriBuilder.path("/cliente/{id}").buildAndExpand(cliente.getId()).toUri();
+        var uri = uriBuilder.path("/{id}").buildAndExpand(cliente.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new ClienteDetalhesDTO(cliente));
     }
@@ -36,25 +33,33 @@ public class ClienteController {
     @GetMapping
     @RequestMapping("/listar")
     public ResponseEntity<List<ClienteDetalhesDTO>> listarCliente(){
-        List<ClienteDetalhesDTO> lista = repository.findAll().stream().map(ClienteDetalhesDTO::new).toList();
+        List<ClienteDetalhesDTO> lista = clienteService.listarCliente();
 
-       return ResponseEntity.ok(lista);
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping
     @RequestMapping("/{id}")
-    public ResponseEntity<ClienteDetalhesDTO> buscarPorId(@PathVariable Long id){
-        var cliente  = repository.getReferenceById(id);
+    public ResponseEntity<ClienteDetalhesDTO> buscarClientePorId(@PathVariable Long id){
+        ClienteDetalhesDTO cliente = clienteService.buscarClientePorId(id);
 
-        return ResponseEntity.ok(new ClienteDetalhesDTO(cliente));
+        return ResponseEntity.ok(cliente);
+    }
+
+    @GetMapping
+    @RequestMapping("buscarPorCpf/{cpf}")
+    public ResponseEntity<ClienteDetalhesDTO> buscarClientePorCpf(@PathVariable String cpf){
+        ClienteDetalhesDTO cliente = clienteService.buscarClientePorCpf(cpf);
+
+        return ResponseEntity.ok(cliente);
     }
 
     @PutMapping
     @RequestMapping("/atualizar")
     @Transactional
     public ResponseEntity<ClienteDetalhesDTO> atualizarCliente(@RequestBody @Valid ClienteAtualizarDTO dto){
-        var cliente = repository.getReferenceById(dto.id());
-        cliente.atualizarCliente(dto);
+
+        Cliente cliente = clienteService.atualizarCliente(dto);
 
         return ResponseEntity.ok(new ClienteDetalhesDTO(cliente));
     }
@@ -62,10 +67,10 @@ public class ClienteController {
     @DeleteMapping
     @RequestMapping("/deletar/{id}")
     @Transactional
-    public ResponseEntity<?> excluirCliente(@PathVariable Long id){
-        repository.deleteById(id);
+    public ResponseEntity<Void> deletarCliente(@PathVariable Long id){
+
+        clienteService.deletarCliente(id);
 
         return ResponseEntity.noContent().build();
     }
-
 }

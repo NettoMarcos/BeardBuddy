@@ -1,38 +1,35 @@
-package com.oak.beardbuddy.domain.servico;
+package com.oak.beardbuddy.domain.item.servico;
 
-import jakarta.persistence.*;
+import com.oak.beardbuddy.domain.item.Item;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 import lombok.*;
 
-@Table(name = "TB_SERVICOS")
-@Entity(name = "servico")
+
+
+
+@EqualsAndHashCode(callSuper = true)
+@Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-public class Servico {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
-    private Double preco;
-    private Integer valorEmPontos;
+@DiscriminatorValue("SERVICO")
+public class Servico extends Item {
 
-    public Servico(ServicoCadastroDTO dto) {
+    public Servico(ServicoCadastroDTO dto){
         this.nome = dto.nome();
         this.preco = dto.preco();
         this.valorEmPontos = dto.valorEmPontos();
     }
 
     public void atualizarServico(ServicoAtualizarDTO dto) {
-
         if(dto.nome() != null){
             this.nome = dto.nome();
         }
         if(dto.preco() != null){
             this.preco = dto.preco();
         }
-        if (dto.valorEmPontos() != null){
+        if(dto.valorEmPontos() != null){
             this.valorEmPontos = dto.valorEmPontos();
         }
     }
