@@ -35,11 +35,11 @@ public class ItemVendido {
 
 
 
-    public ItemVendido(ItemVendidoCadastroDTO dto, Fatura fatura, Item item){
+    public ItemVendido( Integer quantidade, Fatura fatura, Item item, BigDecimal valorTotal ){
         this.fatura = fatura;
         this.item = item;
-        this.quantidade = dto.quantidade();
-        this.valorTotal = dto.valorTotal();
+        this.quantidade = quantidade;
+        this.valorTotal = valorTotal;
     }
 
 }

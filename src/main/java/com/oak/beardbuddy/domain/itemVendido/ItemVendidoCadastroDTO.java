@@ -9,10 +9,8 @@ import java.math.BigDecimal;
 
 public record ItemVendidoCadastroDTO(
         @NotNull
-        Item Item,
+        Long itemId,
         @NotNull
-        Integer quantidade,
-        @NotNull
-        BigDecimal valorTotal
+        Integer quantidade
 ) {
 }

@@ -43,6 +43,7 @@ public class Fatura {
         if(cliente != null){
             this.cliente = cliente;
         }
+        this.valorTotal = new BigDecimal("0.0");
     }
 
 }

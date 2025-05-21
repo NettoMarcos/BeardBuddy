@@ -8,6 +8,7 @@ import com.oak.beardbuddy.domain.item.Item;
 import com.oak.beardbuddy.domain.item.ItemRepository;
 import com.oak.beardbuddy.domain.item.produto.Produto;
 import com.oak.beardbuddy.domain.item.produto.ProdutoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,13 @@ public class ItemVendidoService {
         if(idCliente != null){
              cliente = clienteRepository.getReferenceById(idCliente);
         }
+        for (ItemVendidoCadastroDTO dto : itensCadastro){
+            if (dto.itemId() == null) {
+                throw new IllegalArgumentException("O ID do item não pode ser nulo");
+            }
+            itemRepository.findById(dto.itemId())
+                    .orElseThrow(() -> new EntityNotFoundException("Item não encontrado"));
+        }
 
         Fatura fatura = new Fatura(cliente);
 
@@ -45,18 +53,29 @@ public class ItemVendidoService {
 
         List<ItemVendido> itensSalvos = new ArrayList<>();
 
+        BigDecimal valortotal = BigDecimal.ZERO;
+
         for (ItemVendidoCadastroDTO dto : itensCadastro){
-            Item item = dto.Item();
+
+            if (dto.itemId() == null) {
+                throw new IllegalArgumentException("O ID do item não pode ser nulo");
+            }
+
+            Item item = itemRepository.findById(dto.itemId())
+                    .orElseThrow(() -> new EntityNotFoundException("Item não encontrado"));
+
+            valortotal = valortotal.add(item.getPreco().multiply(BigDecimal.valueOf(dto.quantidade())));
 
             if(item instanceof Produto produto){
                 if (produto.getEstoque() < dto.quantidade()){
                     throw new RuntimeException("Estoque insuficiente para o produto: " + produto.getNome());
                 }
                 produto.setEstoque(produto.getEstoque() - dto.quantidade());
+                valortotal = valortotal.subtract(produto.getValorComprado().multiply(BigDecimal.valueOf(dto.quantidade())));
                 produtoRepository.save(produto);
             }
 
-            ItemVendido itemVendido = new ItemVendido(dto,fatura, item);
+            ItemVendido itemVendido = new ItemVendido(dto.quantidade(),fatura, item, valortotal);
 
             itensSalvos.add(itemVendidoRepository.save(itemVendido));
         }
