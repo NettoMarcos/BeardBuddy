@@ -9,10 +9,11 @@ public record ItemVendidoDetalheDTO(
         Long id,
         Item Item,
         Integer quantidade,
-        BigDecimal valorTotal
+        BigDecimal valorTotal,
+        BigDecimal lucroTotal
 ) {
 
-    ItemVendidoDetalheDTO(ItemVendido itemVendido){
-        this(itemVendido.getId(), itemVendido.getItem(), itemVendido.getQuantidade(),itemVendido.getValorTotal());
+    public ItemVendidoDetalheDTO(ItemVendido itemVendido){
+        this(itemVendido.getId(), itemVendido.getItem(), itemVendido.getQuantidade(),itemVendido.getValorTotal(), itemVendido.getLucroTotal());
     }
 }

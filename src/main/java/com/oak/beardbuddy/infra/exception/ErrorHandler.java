@@ -14,11 +14,6 @@ import java.util.regex.Pattern;
 @RestControllerAdvice
 public class ErrorHandler {
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handlerError404(){
-        return ResponseEntity.notFound().build();
-    }
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handlerError400(MethodArgumentNotValidException ex){
         var erros = ex.getFieldErrors();
@@ -36,6 +31,11 @@ public class ErrorHandler {
         }
 
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponseDTO(field, errorMessage));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     private String extractField(String errorMessage) {

@@ -5,6 +5,7 @@ import com.oak.beardbuddy.domain.item.produto.ProdutoAtualizarDTO;
 import com.oak.beardbuddy.domain.item.produto.ProdutoCadastroDTO;
 import com.oak.beardbuddy.domain.item.produto.ProdutoDetalhesDTO;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,15 +34,19 @@ public class ServicoService {
         return servicoRepository.findById(id).map(ServicoDetalhesDTO::new).orElseThrow(() -> new EntityNotFoundException("Servico não encontrado"));
     }
 
+    @Transactional
     public Servico atualizarServico(ServicoAtualizarDTO dto) {
         Servico servico = servicoRepository.getReferenceById(dto.id());
 
         servico.atualizarServico(dto);
 
+        servicoRepository.save(servico);
+
         return servico;
     }
 
     public void deletarServico(Long id) {
+
         servicoRepository.deleteById(id);
     }
 

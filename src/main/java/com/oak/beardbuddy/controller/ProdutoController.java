@@ -47,7 +47,6 @@ public class ProdutoController {
     @RequestMapping("/atualizar")
     public ResponseEntity<ProdutoDetalhesDTO> atualizarProduto(@RequestBody ProdutoAtualizarDTO dto){
         Produto produto = produtoService.atualizarProduto(dto);
-
         return ResponseEntity.ok(new ProdutoDetalhesDTO(produto));
     }
 

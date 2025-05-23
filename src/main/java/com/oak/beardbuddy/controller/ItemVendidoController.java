@@ -21,12 +21,16 @@ public class ItemVendidoController {
     public ResponseEntity<List<ItemVendidoDetalheDTO>> cadastrarItensVendidos(
             @RequestBody List<ItemVendidoCadastroDTO> dto, @PathVariable(value = "idCliente", required = false) Long idCliente){
 
-
         List<ItemVendidoDetalheDTO> lista = itemVendidoService.cadastrarItensVendidos(dto, idCliente);
 
         return ResponseEntity.ok(lista);
-
     }
 
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Void> deletarItemVendido(@PathVariable Long id){
 
+        itemVendidoService.deletarItemVendido(id);
+
+        return ResponseEntity.noContent().build();
+    }
 }

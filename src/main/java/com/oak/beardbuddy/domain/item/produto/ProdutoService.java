@@ -29,14 +29,19 @@ public class ProdutoService {
     }
 
     public Produto atualizarProduto(ProdutoAtualizarDTO dto) {
-        Produto produto = produtoRepository.getReferenceById(dto.id());
+        Produto produto = produtoRepository.findById(dto.id())
+                .orElseThrow(() -> new EntityNotFoundException("Produto não encontrado"));
 
         produto.atualizarProduto(dto);
+
+        produtoRepository.save(produto);
 
         return produto;
     }
 
     public void deletarProduto(Long id) {
+
+
         produtoRepository.deleteById(id);
     }
 }

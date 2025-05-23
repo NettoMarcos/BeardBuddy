@@ -30,6 +30,9 @@ public class Fatura {
     @Column(name = "VALOR_TOTAL",precision = 10, scale = 4)
     private BigDecimal valorTotal;
 
+    @Column(precision = 10, scale = 4)
+    private BigDecimal lucroTotal;
+
     @ManyToOne
     @JoinColumn(name = "CLIENTE_ID")
     private Cliente cliente;
