@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public record FaturaDetalhesDTO(
         Long id,
-        LocalDateTime dataGeraCao,
+        LocalDateTime dataGeracao,
         BigDecimal valorTotal,
         BigDecimal lucroTotal,
         Cliente cliente,
@@ -22,8 +22,8 @@ public record FaturaDetalhesDTO(
         this(
                 fatura.getId(),
                 fatura.getDataGeracao(),
-                fatura.getLucroTotal(),
                 fatura.getValorTotal(),
+                fatura.getLucroTotal(),
                 fatura.getCliente(),
                 fatura.getItensVendidos().stream().map(ItemVendidoDetalheDTO::new).collect(Collectors.toList())
 

@@ -1,7 +1,9 @@
 package com.oak.beardbuddy.domain.itemVendido;
 
 import com.oak.beardbuddy.domain.cliente.Cliente;
+import com.oak.beardbuddy.domain.cliente.ClienteDetalhesDTO;
 import com.oak.beardbuddy.domain.cliente.ClienteRepository;
+import com.oak.beardbuddy.domain.cliente.ClienteService;
 import com.oak.beardbuddy.domain.fatura.Fatura;
 import com.oak.beardbuddy.domain.fatura.FaturaRepository;
 import com.oak.beardbuddy.domain.item.Item;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ItemVendidoService {
@@ -34,11 +37,11 @@ public class ItemVendidoService {
     @Autowired
     ProdutoRepository produtoRepository;
 
-    public List<ItemVendidoDetalheDTO> cadastrarItensVendidos(List<ItemVendidoCadastroDTO> itensCadastro, Long idCliente) {
+    public List<ItemVendidoDetalheDTO> cadastrarItensVendidos(List<ItemVendidoCadastroDTO> itensCadastro, String cpf) {
         Cliente cliente = null;
 
-        if(idCliente != null){
-             cliente = clienteRepository.getReferenceById(idCliente);
+        if(cpf != null){
+            cliente = clienteRepository.findByCpf(cpf);
         }
 
         validarItens(itensCadastro);

@@ -25,10 +25,17 @@ public class FaturaController {
         return ResponseEntity.ok(lista);
     }
 
-    @GetMapping("/lucro_total_mes")
-    public ResponseEntity<BigDecimal> lucroTotalMes(){
+    @GetMapping("/lucro_liquido_mes")
+    public ResponseEntity<BigDecimal> lucroLiquidoMes(){
 
-        BigDecimal lucroTotalMes = faturaService.lucroTotalMes();
+        BigDecimal lucroTotalMes = faturaService.lucroLiquidoMes();
+
+        return ResponseEntity.ok(lucroTotalMes);
+    }
+    @GetMapping("/lucro_bruto_mes")
+    public ResponseEntity<BigDecimal> lucroBrutoMes(){
+
+        BigDecimal lucroTotalMes = faturaService.lucroBrutoMes();
 
         return ResponseEntity.ok(lucroTotalMes);
     }

@@ -14,4 +14,12 @@ public interface FaturaRepository extends JpaRepository<Fatura, Long> {
           AND EXTRACT(YEAR FROM f.data_geracao) = EXTRACT(YEAR FROM CURRENT_DATE)
         """, nativeQuery = true)
     BigDecimal lucroTotalMes();
+
+    @Query(value = """
+        SELECT COALESCE(SUM(f.valor_total), 0)
+        FROM tb_faturas f
+        WHERE EXTRACT(MONTH FROM f.data_geracao) = EXTRACT(MONTH FROM CURRENT_DATE)
+          AND EXTRACT(YEAR FROM f.data_geracao) = EXTRACT(YEAR FROM CURRENT_DATE)
+        """, nativeQuery = true)
+    BigDecimal lucroBrutoMes();
 }

@@ -1,13 +1,13 @@
 package com.oak.beardbuddy.domain.fatura;
 
 import com.oak.beardbuddy.domain.cliente.Cliente;
+import com.oak.beardbuddy.domain.cliente.ClienteDetalhesDTO;
 import com.oak.beardbuddy.domain.itemVendido.ItemVendido;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public class Fatura {
     @Column(name = "VALOR_TOTAL",precision = 10, scale = 4)
     private BigDecimal valorTotal;
 
-    @Column(precision = 10, scale = 4)
+    @Column(name = "LUCRO_TOTAL",precision = 10, scale = 4)
     private BigDecimal lucroTotal;
 
     @ManyToOne

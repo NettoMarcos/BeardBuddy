@@ -32,8 +32,12 @@ public class FaturaService {
         faturaRepository.deleteById(id);
     }
 
-    public BigDecimal lucroTotalMes() {
+    public BigDecimal lucroLiquidoMes() {
 
-        return  faturaRepository.lucroTotalMes();
+        return faturaRepository.lucroTotalMes();
+    }
+
+    public BigDecimal lucroBrutoMes() {
+        return faturaRepository.lucroBrutoMes();
     }
 }

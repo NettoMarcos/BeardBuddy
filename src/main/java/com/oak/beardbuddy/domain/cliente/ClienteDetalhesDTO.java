@@ -13,4 +13,5 @@ public record ClienteDetalhesDTO(
     public ClienteDetalhesDTO(Cliente cliente){
         this(cliente.getId(), cliente.getNome(), cliente.getCpf(), cliente.getTelefone(), cliente.getDataNascimento());
     }
+
 }

@@ -17,11 +17,11 @@ public class ItemVendidoController {
     @Autowired
     ItemVendidoService itemVendidoService;
 
-    @PostMapping({"/cadastrar", "/cadastrar/{idCliente}"})
+    @PostMapping({"/cadastrar", "/cadastrar/{cpfCliente}"})
     public ResponseEntity<List<ItemVendidoDetalheDTO>> cadastrarItensVendidos(
-            @RequestBody List<ItemVendidoCadastroDTO> dto, @PathVariable(value = "idCliente", required = false) Long idCliente){
+            @RequestBody List<ItemVendidoCadastroDTO> dto, @PathVariable(value = "cpfCliente", required = false) String cpf){
 
-        List<ItemVendidoDetalheDTO> lista = itemVendidoService.cadastrarItensVendidos(dto, idCliente);
+        List<ItemVendidoDetalheDTO> lista = itemVendidoService.cadastrarItensVendidos(dto, cpf);
 
         return ResponseEntity.ok(lista);
     }

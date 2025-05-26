@@ -36,7 +36,7 @@ public class ClienteService {
         return clienteRepository.findById(id).map(ClienteDetalhesDTO::new).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado"));
     }
 
-    public ClienteDetalhesDTO buscarClientePorCpf(String cpf) {
+    public Cliente buscarClientePorCpf(String cpf) {
 
         return clienteRepository.findByCpf(cpf);
     }
@@ -44,4 +44,5 @@ public class ClienteService {
     public void deletarCliente(Long id) {
         clienteRepository.deleteById(id);
     }
+
 }
