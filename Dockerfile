@@ -1,12 +1,11 @@
 FROM ubuntu:latest AS build
 
-RUN apt-get update && apt-get install -y openjdk-21-jdk maven
-
+RUN apt-get update
+RUN apt-get install openjdk-21-jdk -y
 COPY . .
 
-RUN mvn clean package
-
-RUN ls -l target/
+RUN apt-get install maven -y
+RUN mvn clean install
 
 FROM openjdk:21-jdk-slim
 
